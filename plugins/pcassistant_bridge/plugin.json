@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "id": "pcassistant_bridge",
+  "name": "PC Assistant Bridge",
+  "version": "1.0.0",
+  "description": "Exposes the local PC Assistant plugins (files, GP7, homework, downloads, grammar) to the desktop shell. Read-only adapter: it never runs shell commands and never calls the general AI chat fallback.",
+  "entry": "main.py",
+  "protocol": "python",
+  "python": ">=3.10",
+  "vendor": "local",
+  "license": "private",
+  "capabilities": {
+    "search": true,
+    "preview": true,
+    "rows": true,
+    "commands": ["preview", "commit", "health", "describe"],
+    "streaming": false,
+    "background": false
+  },
+  "ui": {
+    "rows": true,
+    "row_schema_version": 1,
+    "row_kinds": ["result", "action", "suggestion", "status"],
+    "row_keys": [
+      "id",
+      "kind",
+      "title",
+      "subtitle",
+      "badge",
+      "plugin",
+      "confidence",
+      "action",
+      "submit",
+      "search_text"
+    ]
+  },
+  "permissions": {
+    "filesystem": "read",
+    "shell": false,
+    "network": "plugin-managed",
+    "clipboard": "write"
+  },
+  "actions": {
+    "allowed": ["open", "reveal", "copy"],
+    "denied": ["run"],
+    "max_actions": 64,
+    "max_copy_chars": 200000,
+    "require_existing_target": true
+  },
+  "policy": {
+    "free_text": "suggest-only",
+    "free_text_calls_general_ai": false,
+    "guard": "parse_query(...).hint",
+    "live_plugins": ["file_search", "gp7_search"],
+    "enter_only_plugins": [
+      "grammar_fixer",
+      "homework_search",
+      "downloads_summarizer"
+    ]
+  },
+  "timeouts": {
+    "preview_seconds": 3,
+    "commit_seconds": 90,
+    "health_seconds": 5
+  },
+  "commands": [
+    {
+      "id": "preview",
+      "description": "Live update while the user types. Executes only explicit @file_search / @gp7_search requests.",
+      "input": { "text": "string", "hint": "string?" },
+      "output": "BridgeResponse"
+    },
+    {
+      "id": "commit",
+      "description": "Runs on Enter. Executes any explicitly addressed plugin, including the enter-only ones.",
+      "input": { "text": "string", "hint": "string?" },
+      "output": "BridgeResponse"
+    },
+    {
+      "id": "health",
+      "description": "Plugin and AI readiness.",
+      "input": {},
+      "output": "BridgeResponse"
+    },
+    {
+      "id": "describe",
+      "description": "Plugin catalogue plus the bridge policy.",
+      "input": {},
+      "output": "BridgeResponse"
+    }
+  ],
+  "requires": {
+    "pcassistant": ">=1.0",
+    "third_party": []
+  },
+  "lifecycle": {
+    "startup": "lazy",
+    "shutdown": "close_engine"
+  }
+}
