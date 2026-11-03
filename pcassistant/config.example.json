@@ -1,0 +1,62 @@
+{
+  "llm": {
+    "provider": "gemini",
+    "enabled": true,
+    "api_key": "",
+    "model": "gemini-2.5-flash",
+    "fallback_models": ["gemini-2.0-flash", "gemini-flash-latest"],
+    "timeout_seconds": 45,
+    "max_retries": 2
+  },
+  "paths": {
+    "gp7_root": "C:\\Users\\YOUR_NAME\\Videos\\GP7",
+    "homework_roots": [
+      "C:\\Users\\YOUR_NAME\\Documents\\School",
+      "C:\\Users\\YOUR_NAME\\OneDrive\\Documents\\School"
+    ],
+    "file_search_roots": [],
+    "downloads": ""
+  },
+  "file_search": {
+    "max_entries": 20000,
+    "max_depth": 6,
+    "cache_ttl_seconds": 3600,
+    "scan_budget_seconds": 2.5,
+    "default_limit": 12
+  },
+  "plugins": {
+    "grammar_fixer": {
+      "enabled": true,
+      "allow_network": true,
+      "tone": "neutral",
+      "max_chars": 8000,
+      "timeout_seconds": 60
+    },
+    "gp7_search": {
+      "enabled": true,
+      "max_files": 1500,
+      "max_results": 8,
+      "timeout_seconds": 20
+    },
+    "homework_search": {
+      "enabled": true,
+      "synthesize": true,
+      "max_files": 1500,
+      "max_file_bytes": 5000000,
+      "max_results": 6,
+      "timeout_seconds": 60
+    },
+    "file_search": {
+      "enabled": true,
+      "timeout_seconds": 20
+    },
+    "downloads_summarizer": {
+      "enabled": true,
+      "days": 7,
+      "limit": 8,
+      "max_chars": 12000,
+      "summary_ttl_days": 30,
+      "timeout_seconds": 90
+    }
+  }
+}
